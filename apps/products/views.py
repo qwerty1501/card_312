@@ -1,15 +1,15 @@
 from django.shortcuts import render
 from rest_framework import generics
 
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Products
+from .serializers import ProductsSerializer
 
 
 class ProductCreateListView(generics.ListCreateAPIView):
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    serializer_class = ProductsSerializer
+    queryset = Products.objects.all()
     
     
 class ProductDeleteView(generics.DestroyAPIView):
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    serializer_class = ProductsSerializer
+    queryset = Products.objects.all()

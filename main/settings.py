@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # APPS
     'apps.categories.apps.CategoriesConfig',
     'apps.partners.apps.PartnersConfig',
+    'apps.products.apps.ProductsConfig',
     'apps.users.apps.UsersConfig',
     # REST
     'rest_framework',

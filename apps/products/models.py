@@ -22,3 +22,19 @@ class Products(models.Model):
     
     def __str__(self):
         return self.name
+    
+
+class Playbill(models.Model):
+
+    class Meta:
+        db_table = 'playbill'
+        verbose_name = 'Афиша'
+        verbose_name_plural = 'Афиша'
+
+    image = models.ImageField(verbose_name='Фотография *(385x165)', upload_to='apps/images/playbill')
+    title = models.CharField(verbose_name="Название", max_length=128)
+    description = models.TextField(verbose_name='Описание')
+    price = models.CharField(verbose_name="Цена", max_length=16)
+
+    def __str__(self):
+        return self.title

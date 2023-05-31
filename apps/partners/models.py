@@ -12,6 +12,7 @@ class Partners(models.Model):
         verbose_name_plural = 'ПАРТНЁРЫ'
         
     logo = models.FileField(verbose_name='Загрузить логотип *(150x150)', upload_to=get_upload_path, validators=[validate_file_extension], null=True, blank=True)
+    image = models.FileField(verbose_name='Загрузить фонд *(305x210)', upload_to=get_upload_path, validators=[validate_file_extension], null=True, blank=True)
     mail = models.EmailField(verbose_name='Почта', max_length=64, blank=True, null=True)
     name = models.CharField(verbose_name='Наименование (брендовое название )', max_length=64)
     address = models.CharField(verbose_name='Адрес компании', max_length=64)

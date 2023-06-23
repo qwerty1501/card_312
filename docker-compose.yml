@@ -33,7 +33,7 @@ services:
           - PUID=1000
           - PGID=1000
           - TZ=Asia/Bishkek
-          - URL=city312.kg
+          - URL=_
           - SUBDOMAINS=api
           - VALIDATION=http
           - ONLY_SUBDOMAINS=true

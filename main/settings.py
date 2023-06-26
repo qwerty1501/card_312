@@ -107,7 +107,7 @@ DATABASES = {
        'PASSWORD': 'card_123',
        'HOST': 'pgdb',
        # 'HOST': 'ec2-18-234-17-166.compute-1.amazonaws.com',
-       'PORT': '',
+       'PORT': '5432',
    }
 }
 

@@ -11,7 +11,7 @@ services:
           - ./media:/app/media/
           - ./static:/app/static/
       ports:
-          - "8000:8000"
+          - "5432:5432"
       depends_on:
           - pgdb
 

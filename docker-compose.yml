@@ -20,10 +20,13 @@ services:
     container_name: pgdb
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+          - "5432:5432"
     environment:
       - POSTGRES_DB=card_db
       - POSTGRES_USER=card_user
       - POSTGRES_PASSWORD=card_123
+      - PORT=5432
 
   nginx:
       image: linuxserver/swag

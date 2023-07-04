@@ -4,15 +4,7 @@ from django import forms
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
-from apps.users.models import User
-from apps.users.models import Basket
-from apps.users.models import Mycard
-from apps.users.models import Bankcard
-from apps.users.models import Subscr
-from apps.users.models import Coment
-from apps.users.models import Like
-from apps.users.models import Favorites
-
+from apps.users.models import User, Basket, Mycard , Bankcard, Subscr, Coment, Like, Favorites
 
 class UserCreationForm(forms.ModelForm):
     class Meta:

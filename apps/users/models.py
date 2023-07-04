@@ -38,13 +38,13 @@ class User(AbstractUser):
     uniqueId = models.UUIDField(unique=True, verbose_name="Уникальный id", blank=True, null=True);
 
     logo = models.FileField(verbose_name='Загрузить фото *(150x150)', upload_to=get_upload_path, validators=[validate_file_extension], null=True, blank=True)
-    email = models.EmailField(verbose_name='Почта', max_length=64, default=None, unique=True, blank=True, null=True)
+    email = models.EmailField(verbose_name='Почта', max_length=500, default=None, unique=True, blank=True, null=True)
     name = models.CharField(verbose_name='Имя', max_length=32)
     surname = models.CharField(verbose_name='Фамилия', max_length=32, blank=True, null=True)
     phone_one = models.CharField(verbose_name="Номер телефона", max_length=32, blank=True, null=True)
     dob = models.CharField(verbose_name='Дата рождения', max_length=16, blank=True, null=True)
     card = models.CharField(verbose_name='Номер дисконтной карты', max_length=16)
-    password = models.CharField(verbose_name='Пароль', max_length=64)
+    password = models.CharField(verbose_name='Пароль', max_length=500)
     # REST_Password
     resetPasswordUUID = models.UUIDField(verbose_name="Ссылка для восстановления пароля", blank=True, null=True);
     resetPasswordDate = models.BigIntegerField(verbose_name="Время восстановления пароля", blank=True, null=True);

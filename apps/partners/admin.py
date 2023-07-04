@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from apps.products.models import Partners
-
+from .models import Partners
 
 admin.site.register(Partners)

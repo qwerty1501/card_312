@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     'apps.partners.apps.PartnersConfig',
     'apps.products.apps.ProductsConfig',
     'apps.users.apps.UsersConfig',
+    'apps.contact.apps.ContactConfig',
+    'apps.homes.apps.HomesConfig',
+    'apps.discount.apps.DiscountConfig',
+    
     # REST
     'rest_framework',
     'django_filters',

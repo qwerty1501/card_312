@@ -1,6 +1,6 @@
 from rest_framework import serializers as s
 
-from .models import Category
+from .models import Service_category, Product_category, Sale_category
 
 
 class RecursiveSerializer(s.Serializer):
@@ -10,9 +10,32 @@ class RecursiveSerializer(s.Serializer):
         return serializer.data
 
 
-class CategorySerializer(s.ModelSerializer):
+class Service_categorySerializer(s.ModelSerializer):
     children = RecursiveSerializer(many=True)
 
     class Meta:
-        model = Category
+        model = Service_category
         fields = ['id', 'name', 'icon', 'image', 'children']
+        
+        
+        
+class Product_categorySerializer(s.ModelSerializer):
+    children = RecursiveSerializer(many=True)
+
+    class Meta:
+        model = Product_category
+        fields = ['id', 'name', 'icon', 'image', 'children']
+        
+        
+        
+class Sale_categorySerializer(s.ModelSerializer):
+        
+    children = RecursiveSerializer(many=True)
+
+    class Meta:
+        model = Sale_category
+        fields = ['id', 'name', 'icon', 'image', 'children']
+        
+        
+        
+        

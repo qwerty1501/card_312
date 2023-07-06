@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.categories.models import Category
+from apps.categories.models import Service_category
 from apps.partners.models import Partners
 
 
@@ -12,7 +12,7 @@ class Products(models.Model):
         verbose_name_plural = 'Продукты'
     
     partners = models.ForeignKey(Partners, verbose_name="Партнёр", on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.CASCADE)
+    category = models.ForeignKey(Service_category, verbose_name="Категория", on_delete=models.CASCADE)
     image = models.ImageField(verbose_name='Фотография *(387x167)', upload_to='apps/images/product')
     discounts = models.CharField(verbose_name="Скидки", max_length=16, blank=True, null=True)
     name = models.CharField(verbose_name="Название", max_length=50)

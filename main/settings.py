@@ -95,25 +95,25 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'card_db',
-#        'USER': 'card_user',
-#        'PASSWORD': 'card_123',
-#        'HOST': 'pgdb',
-#        # 'HOST': 'ec2-18-234-17-166.compute-1.amazonaws.com',
-#        'PORT': '5432',
-#    }
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+
+
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'card_db',
+       'USER': 'card_user',
+       'PASSWORD': 'card_123',
+       'HOST': 'pgdb',
+       # 'HOST': 'ec2-18-234-17-166.compute-1.amazonaws.com',
+       'PORT': '5432',
+   }
+}
 
 
 # Password validation

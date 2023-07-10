@@ -27,8 +27,8 @@ class User(AbstractUser):
     
     class Meta:
         # db_table = 'users_user'
-        verbose_name = 'ПОЛЬЗОВАТЕЛЯ'
-        verbose_name_plural = 'ПОЛЬЗОВАТЕЛИ'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователь'
 
     def __str__(self):
         return self.uniqueId.__str__();
@@ -65,6 +65,10 @@ class User(AbstractUser):
     
     
 class Basket(models.Model):
+    
+    class Meta:
+        verbose_name = 'Kорзина'
+        verbose_name_plural = 'Kорзина'
     
     user = models.ForeignKey("User",on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
@@ -138,17 +142,39 @@ class Coment(models.Model):
 class Like(models.Model):
         
         class Meta:
-            verbose_name = 'Ваши понравившееся публикации'
-            verbose_name_plural = 'Ваши понравившееся публикации'
+            verbose_name = 'Лайки'
+            verbose_name_plural = 'Лайки'
             
         post = models.ForeignKey("User", on_delete=models.CASCADE)
-        image = models.ImageField(verbose_name='Фотография *(200x160)', upload_to='apps/images/users')    
-        name = models.CharField(verbose_name="Название", max_length=50)
-        title = models.CharField(max_length=20)
+        image = models.ImageField(verbose_name='Фотография *(200x160)', upload_to='apps/images/users' , max_length=32, blank=True, null=True)    
+        name = models.CharField(verbose_name="Лайки", max_length=32, blank=True, null=True)
+        title = models.CharField(max_length=32, blank=True, null=True)
         likes = models.BooleanField(default=False)
 
         def __str__(self):
             return f'{self.likes}'
+        
+        
+        
+        
+class Post(models.Model):
+    '''данные о посте'''
+    title = models.CharField('Заголовок записи', max_length=100)
+    description = models.TextField('Текст записи')
+    author = models.CharField('Имя автора', max_length=100)
+    date = models.DateField('Дата публикации')
+    img = models.ImageField("Изображение", upload_to='image/%Y')
+
+    def __str__(self):
+        return f'{self.title}, {self.author}'
+    
+    
+    
+            
+class Likes(models.Model):
+    '''лайки'''
+    ip = models.CharField('IP-адрес', max_length=100)
+    pos = models.ForeignKey(Post, verbose_name='Публикация', on_delete=models.CASCADE)
 
 
 class Favorites(models.Model):
@@ -158,7 +184,7 @@ class Favorites(models.Model):
             verbose_name_plural = 'Избранное'
             
         user = models.ForeignKey("User",on_delete=models.CASCADE)
-        like = models.ForeignKey("Like",on_delete=models.CASCADE)
+        like = models.ForeignKey("Post",on_delete=models.CASCADE)
         image = models.ImageField(verbose_name='Фотография *(400x167)', upload_to='apps/images/users')    
         name = models.CharField(verbose_name="Название", max_length=50)
         name_one = models.CharField(verbose_name="Oписание" , max_length=999)

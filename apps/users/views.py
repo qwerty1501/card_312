@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 
+
 from .serializers import SendMailSerializer, SendMessageSerializer
 from apps.users.models import User
 from apps.users.serializers import UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer, SendMessageSerializer
@@ -29,6 +30,16 @@ from apps.users.models import Subscr
 from apps.users.models import Coment
 from apps.users.models import Like
 from apps.users.models import Favorites
+
+
+from django.views.generic.base import View
+from .models import Favorites, Likes
+from django.shortcuts import render, redirect
+from .models import Post, Likes
+
+from django.shortcuts import render, redirect
+from django.views.generic.base import View
+
 
 class MVSDynamicPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -237,13 +248,13 @@ class ComentDeteleView(generics.DestroyAPIView):
     queryset = Coment.objects.all()
 
 
-class LikeCreateListView(generics.ListCreateAPIView):
-    # serializer = BasketSerializer
-    queryset = Like.objects.all()
+# class LikeCreateListView(generics.ListCreateAPIView):
+#     # serializer = BasketSerializer
+#     queryset = Like.objects.all()
     
-class LikeDeteleView(generics.DestroyAPIView):
-    # serializer = BasketSerializer
-    queryset = Like.objects.all()
+# class LikeDeteleView(generics.DestroyAPIView):
+#     # serializer = BasketSerializer
+#     queryset = Like.objects.all()
     
     
     
@@ -254,3 +265,72 @@ class FavoritesCreateListView(generics.ListCreateAPIView):
 class FavoritesDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Favorites.objects.all()
+    
+
+
+
+
+
+class PostView(View):
+    '''вывод записей'''
+    def get(self, request):
+        posts = Post.objects.all()
+        return render(request, 'blog/blog.html', {'post_list': posts})
+
+
+class PostDetail(View):
+    '''отдельная страница записи'''
+    def get(self, request, pk):
+        post = Post.objects.get(id=pk)
+        return render(request, 'blog/blog_detail.html', {'post': post})
+
+
+
+
+
+
+
+
+
+     
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+    
+class AddLike(View):
+    def get(self, request, pk):
+        ip_client = get_client_ip(request)
+        try:
+            Likes.objects.get(ip=ip_client, pos_id=pk)
+            return redirect(f'/{pk}')
+        except:
+            new_like = Likes()
+            new_like.ip = ip_client
+            new_like.pos_id = int(pk)
+            new_like.save()
+            return redirect(f'/{pk}')
+
+
+class DelLike(View):
+    def get(self, request, pk):
+        ip_client = get_client_ip(request)
+        try:
+            lik = Likes.objects.get(ip=ip_client)
+            lik.delete()
+            return redirect(f'/{pk}')
+        except:
+            return redirect(f'/{pk}')
+        
+        
+class LikeView(View):
+    '''вывод записей'''
+    def get(self, request):
+        posts = Like.objects.all()
+        return render(request, 'blog/blog.html', {'post_list': posts})
+    
+     

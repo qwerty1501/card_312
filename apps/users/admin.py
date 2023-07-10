@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
 from apps.users.models import User, Basket, Mycard , Bankcard, Subscr, Coment, Like, Favorites
-
+from .models import Like
 class UserCreationForm(forms.ModelForm):
     class Meta:
         model = User
@@ -60,5 +60,9 @@ admin.site.register(Mycard);
 admin.site.register(Bankcard);
 admin.site.register(Subscr);
 admin.site.register(Coment);
-admin.site.register(Like);
+# admin.site.register(Like);
 admin.site.register(Favorites);
+
+@admin.register(Like)
+class Favorites(admin.ModelAdmin):
+    list_display = ('title', 'name')

@@ -8,8 +8,8 @@ class Partners(models.Model):
     
     class Meta:
         db_table = 'partners'
-        verbose_name = 'ПАРТНЁРА'
-        verbose_name_plural = 'ПАРТНЁРЫ'
+        verbose_name = 'Партнёр'
+        verbose_name_plural = 'Партнёр'
         
     logo = models.FileField(verbose_name='Загрузить логотип *(150x150)', upload_to=get_upload_path, validators=[validate_file_extension], null=True, blank=True)
     image = models.FileField(verbose_name='Загрузить фонд *(305x210)', upload_to=get_upload_path, validators=[validate_file_extension], null=True, blank=True)

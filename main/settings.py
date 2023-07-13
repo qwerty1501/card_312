@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.contact.apps.ContactConfig',
     'apps.homes.apps.HomesConfig',
     'apps.discount.apps.DiscountConfig',
+    'apps.registration.apps.RegistrationConfig',
     
     # REST
     'rest_framework',

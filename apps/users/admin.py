@@ -6,6 +6,8 @@ from django.utils.safestring import mark_safe
 
 from apps.users.models import User, Basket, Mycard , Bankcard, Subscr, Coment, Like, Favorites
 from .models import Like
+
+
 class UserCreationForm(forms.ModelForm):
     class Meta:
         model = User
@@ -45,13 +47,14 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ['email'];
     add_form = UserCreationForm
     form = UserCreationForm
-    list_display = ['uniqueId', 'email']
+    list_display = ['name', 'surname', 'uniqueId', 'email']
     list_display_links = ['email', 'uniqueId']
     ordering = ("-id",)
 
     fieldsets = fieldsets
 
     add_fieldsets = fieldsets
+
 
 admin.site.register(User, CustomUserAdmin);
 admin.site.unregister(Group);
@@ -62,6 +65,7 @@ admin.site.register(Subscr);
 admin.site.register(Coment);
 # admin.site.register(Like);
 admin.site.register(Favorites);
+
 
 @admin.register(Like)
 class Favorites(admin.ModelAdmin):

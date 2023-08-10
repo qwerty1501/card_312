@@ -17,10 +17,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 
+from drf_yasg.utils import swagger_auto_schema
 
 from .serializers import SendMailSerializer, SendMessageSerializer
 from apps.users.models import User
-from apps.users.serializers import UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer, SendMessageSerializer
+from apps.users.serializers import (UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer,
+                                    SendMessageSerializer, UserRegisterSerializer)
 
 from apps.utils.main import generateError, generateAuthInfo
 from apps.users.models import Basket
@@ -198,7 +200,8 @@ class SendMailUserApiView(APIView):
                       recipient_list=['temircard@gmail.com'])
             return Response(serializer.errors, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class BasketCreateListView(generics.ListCreateAPIView):
     # serializer = BasketSerializer
     queryset = Basket.objects.all()
@@ -207,7 +210,6 @@ class BasketCreateListView(generics.ListCreateAPIView):
 class BasketDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Basket.objects.all()
-
 
 
 class MycardCreateListView(generics.ListCreateAPIView):
@@ -219,12 +221,12 @@ class MycardDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Mycard.objects.all()
     
-    
 
 class BankcardCreateListView(generics.ListCreateAPIView):
     # serializer = BasketSerializer
     queryset = Bankcard.objects.all()
-    
+
+
 class BankcardDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Bankcard.objects.all()
@@ -233,7 +235,8 @@ class BankcardDeteleView(generics.DestroyAPIView):
 class SubscrCreateListView(generics.ListCreateAPIView):
     # serializer = BasketSerializer
     queryset = Subscr.objects.all()
-    
+
+
 class SubscrDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Subscr.objects.all()
@@ -242,7 +245,8 @@ class SubscrDeteleView(generics.DestroyAPIView):
 class ComentCreateListView(generics.ListCreateAPIView):
     # serializer = BasketSerializer
     queryset = Coment.objects.all()
-    
+
+
 class ComentDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Coment.objects.all()
@@ -257,40 +261,14 @@ class ComentDeteleView(generics.DestroyAPIView):
 #     queryset = Like.objects.all()
     
     
-    
 class FavoritesCreateListView(generics.ListCreateAPIView):
     # serializer = BasketSerializer
     queryset = Favorites.objects.all()
-    
+
+
 class FavoritesDeteleView(generics.DestroyAPIView):
     # serializer = BasketSerializer
     queryset = Favorites.objects.all()
-    
-
-
-
-
-
-# class PostView(View):
-#     '''вывод записей'''
-#     def get(self, request):
-#         posts = Post.objects.all()
-#         return render(request, 'blog/blog.html', {'post_list': posts})
-#
-#
-# class PostDetail(View):
-#     '''отдельная страница записи'''
-#     def get(self, request, pk):
-#         post = Post.objects.get(id=pk)
-#         return render(request, 'blog/blog_detail.html', {'post': post})
-
-
-
-
-
-
-
-
 
      
 def get_client_ip(request):
@@ -325,12 +303,13 @@ class DelLike(View):
             return redirect(f'/{pk}')
         except:
             return redirect(f'/{pk}')
-        
-        
-# class LikeView(View):
-#     '''вывод записей'''
-#     def get(self, request):
-#         posts = Like.objects.all()
-#         return render(request, 'blog/blog.html', {'post_list': posts})
-    
-     
+
+
+class UserRegistrationView(APIView):
+    @swagger_auto_schema(request_body=UserSerializer)
+    def post(self, request, format=None):
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

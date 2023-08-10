@@ -15,7 +15,7 @@ from .services import get_upload_path, validate_file_extension
 
 class Rename:
     def __init__(self, path):
-        self.path = path;
+        self.path = path
         
     def rename(self, instance, filename):
         ext = filename.split('.')[-1]
@@ -31,7 +31,7 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователь'
 
     def __str__(self):
-        return self.uniqueId.__str__();
+        return f"{self.name} {self.surname}"
     
     username = None;
 
@@ -135,8 +135,6 @@ class Coment(models.Model):
             return self.name
         
         
-        
-        
 class Like(models.Model):
         
         class Meta:
@@ -151,9 +149,7 @@ class Like(models.Model):
 
         def __str__(self):
             return f'{self.likes}'
-        
-        
-        
+
         
 class Post(models.Model):
     '''данные о посте'''
@@ -165,12 +161,10 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title}, {self.author}'
-    
-    
-    
-            
+
+
+# лайки
 class Likes(models.Model):
-    '''лайки'''
     ip = models.CharField('IP-адрес', max_length=100)
     pos = models.ForeignKey(Post, verbose_name='Публикация', on_delete=models.CASCADE)
 
@@ -181,11 +175,11 @@ class Favorites(models.Model):
             verbose_name = 'Избранное'
             verbose_name_plural = 'Избранное'
             
-        user = models.ForeignKey("User",on_delete=models.CASCADE)
-        like = models.ForeignKey("Post",on_delete=models.CASCADE)
+        user = models.ForeignKey("User", on_delete=models.CASCADE)
+        like = models.ForeignKey("Post", on_delete=models.CASCADE)
         image = models.ImageField(verbose_name='Фотография *(400x167)', upload_to='apps/images/users')    
         name = models.CharField(verbose_name="Название", max_length=50)
-        name_one = models.CharField(verbose_name="Oписание" , max_length=999)
+        name_one = models.CharField(verbose_name="Oписание", max_length=999)
         
         def __str__(self):
             return self.name

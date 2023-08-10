@@ -87,33 +87,44 @@ class MycardSerializer(serializers.Serializer):
     class Meta: 
         model = Mycard
         fields = "__all__"
-        
+
+
 class BankcardSerializer(serializers.Serializer):
     
     class Meta:
         model = Bankcard
         fields = "__all__"
 
+
 class SubscrSerializer(serializers.Serializer):
     
     class Meta:
         model = Subscr
         fields = "__all__"
-        
+
+
 class ComentSerializer(serializers.Serializer):
     
     class Meta:
         model = Coment
         fields = "__all__"
-        
+
+
 class LikeSerializer(serializers.Serializer):
     
     class Meta:
         model = Like
         fields = 'post','image','name','title','likes'
-        
+
+
 class FavoritesSerializer(serializers.Serializer):
     
     class Meta:
         model = Favorites
         fields = "__all__"
+
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'

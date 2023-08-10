@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from apps.users.views import UserMVS, UserLoginView, ResetPasswordMVS, CustomTokenRefreshView, SendMailAPIView, SendMailUserApiView
+from apps.users.views import (UserMVS, UserLoginView, ResetPasswordMVS, CustomTokenRefreshView, SendMailAPIView,
+                              SendMailUserApiView)
 
 from . import views
 
@@ -29,7 +30,8 @@ useSingle3 = {
 
 urlpatterns = [
 
-    path('user/', UserMVS.as_view(userPlural)),
+    # path('user/', UserMVS.as_view(userPlural)),
+    path('user-register/', views.UserRegistrationView.as_view()),
     path('<uuid:uniqueId>/', UserMVS.as_view(useSingle)),
 
     path('login/', UserLoginView.as_view()),
@@ -40,7 +42,6 @@ urlpatterns = [
     path('reset-password/<uuid:resetPasswordUUID>/', ResetPasswordMVS.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('send-mail-message/',  SendMailAPIView.as_view()),
     path('send-mail-order/', SendMailUserApiView.as_view()),
-    
 
     # path('', views.PostView.as_view()),
     # path('<int:pk>/', views.PostDetail.as_view()),

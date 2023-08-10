@@ -4,15 +4,14 @@ from .services import get_upload_path, validate_file_extension
 # from apps.categories import Service_category , Product_category, Sale_category
 from apps.categories.choices import Size
 
+
 class Service_category(models.Model):
-    
-    
+
     class Meta:
         db_table = 'service_category'
         verbose_name = 'Категория Услуг'
         verbose_name_plural = 'Категории Услуг'
-        
-    
+
     parent = models.ForeignKey('self', on_delete=models.PROTECT, related_name='children', blank=True, null=True)
     size = models.CharField(verbose_name="Размер", max_length=100, default=None, choices=Size, blank=True, null=True)
     name = models.CharField(verbose_name="Название категории для", max_length=255)
@@ -21,9 +20,13 @@ class Service_category(models.Model):
     is_main = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name}'
-    
-    
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' -> '.join(full_path[::-1])
+
     
 class Product_category(models.Model):
     
@@ -40,7 +43,12 @@ class Product_category(models.Model):
     is_main = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name}'
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' -> '.join(full_path[::-1])
     
     
     
@@ -60,8 +68,11 @@ class Sale_category(models.Model):
     is_main = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name}'
-    
-    
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' -> '.join(full_path[::-1])
     
     

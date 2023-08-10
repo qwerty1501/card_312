@@ -6,7 +6,6 @@ class Register(models.Model):
         db_table = 'Регистрация'
         verbose_name = 'Регистрация пользователя'
         verbose_name_plural = 'Регистрация пользователя'
-        
 
     email = models.EmailField(verbose_name=" Введите адрес электронной почты", max_length=32)
     number = models.CharField(verbose_name="Телефон", max_length=16)

@@ -77,8 +77,6 @@ class Basket(models.Model):
         
     def __str__(self):
         return f'Корзина{self.user.username} | Корзина {self.product.name}'
-        
-    
 
 
 class Mycard(models.Model):

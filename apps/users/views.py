@@ -53,27 +53,27 @@ class MVSDynamicPermission(permissions.BasePermission):
 
 
 class UserMVS(viewsets.ModelViewSet):
-    queryset = User.objects.all();
+    queryset = User.objects.all()
     permission_classes = [MVSDynamicPermission]
     lookup_field = 'uniqueId'
     serializer_class = UserSerializer
 
     def create(self, request):
-        secretAdminKey = request.data.get('secretAdminKey');
+        secretAdminKey = request.data.get('secretAdminKey')
         if secretAdminKey == settings.SECRET_ADMIN_KEY:
-            serializer = UserCRUDSerializer(data={'password': settings.DEFAULT_PASSWORD}, context={'request': request});
-            serializer.is_valid(raise_exception=True);
-            serializer.save();
-            return Response(data=f"{settings.CLIENT_URL}/user/{serializer.data['uniqueId']}");
-        return Response(status=status.HTTP_403_FORBIDDEN);
+            serializer = UserCRUDSerializer(data={'password': settings.DEFAULT_PASSWORD}, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(data=f"{settings.CLIENT_URL}/user/{serializer.data['uniqueId']}")
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
     def update(self, request, *args, **kwargs):
-        user = request.user;
-        data = request.data.dict();
-        serializer = UserCRUDSerializer(user, data=data, context={'request': request});
-        serializer.is_valid(raise_exception=True);
-        serializer.save();
-        return Response(serializer.data);
+        unique_id = kwargs['uniqueId']
+        user = User.objects.get(uniqueId=unique_id)
+        serializer = UserCRUDSerializer(user, data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 class UserLoginView(generics.CreateAPIView):
@@ -271,18 +271,18 @@ class FavoritesDeteleView(generics.DestroyAPIView):
 
 
 
-class PostView(View):
-    '''вывод записей'''
-    def get(self, request):
-        posts = Post.objects.all()
-        return render(request, 'blog/blog.html', {'post_list': posts})
-
-
-class PostDetail(View):
-    '''отдельная страница записи'''
-    def get(self, request, pk):
-        post = Post.objects.get(id=pk)
-        return render(request, 'blog/blog_detail.html', {'post': post})
+# class PostView(View):
+#     '''вывод записей'''
+#     def get(self, request):
+#         posts = Post.objects.all()
+#         return render(request, 'blog/blog.html', {'post_list': posts})
+#
+#
+# class PostDetail(View):
+#     '''отдельная страница записи'''
+#     def get(self, request, pk):
+#         post = Post.objects.get(id=pk)
+#         return render(request, 'blog/blog_detail.html', {'post': post})
 
 
 
@@ -327,10 +327,10 @@ class DelLike(View):
             return redirect(f'/{pk}')
         
         
-class LikeView(View):
-    '''вывод записей'''
-    def get(self, request):
-        posts = Like.objects.all()
-        return render(request, 'blog/blog.html', {'post_list': posts})
+# class LikeView(View):
+#     '''вывод записей'''
+#     def get(self, request):
+#         posts = Like.objects.all()
+#         return render(request, 'blog/blog.html', {'post_list': posts})
     
      

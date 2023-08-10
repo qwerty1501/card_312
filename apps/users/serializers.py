@@ -33,14 +33,14 @@ class UserCRUDSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    def update(self, instance, validated_data):
-        for field, value in validated_data.items():
-            if field == 'password':
-                instance.set_password(value);
-            else:
-                setattr(instance, field, value)
-        instance.save();
-        return instance;
+    # def update(self, instance, validated_data):
+    #     for field, value in validated_data.items():
+    #         if field == 'password':
+    #             instance.set_password(value)
+    #         else:
+    #             setattr(instance, field, value)
+    #     instance.save()
+    #     return instance
 
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):

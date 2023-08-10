@@ -40,13 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # APPS
     'apps.categories.apps.CategoriesConfig',
-    'apps.partners.apps.PartnersConfig',
-    'apps.products.apps.ProductsConfig',
     'apps.users.apps.UsersConfig',
     'apps.contact.apps.ContactConfig',
     'apps.homes.apps.HomesConfig',
-    'apps.discount.apps.DiscountConfig',
-    'apps.registration.apps.RegistrationConfig',
     
     # REST
     'rest_framework',

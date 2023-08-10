@@ -8,7 +8,7 @@ from django.db import models
 
 from apps.users.managers import CustomManager
 
-from apps.products.models import Products
+
 
 from .services import get_upload_path, validate_file_extension
 
@@ -59,9 +59,6 @@ class User(AbstractUser):
         if not self.id:
             self.uniqueId = uuid.uuid4()
         super(User, self).save(force_insert=False, force_update=False, using=None, update_fields=None)
-        
-        quantity = models.PositiveIntegerField(default=0)
-        user = models.ForeignKey(Products,on_delete=models.CASCADE)
     
     
 class Basket(models.Model):
@@ -71,7 +68,6 @@ class Basket(models.Model):
         verbose_name_plural = 'Kорзина'
     
     user = models.ForeignKey("User",on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
         

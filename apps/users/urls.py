@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.users.views import (UserMVS, UserLoginView, ResetPasswordMVS, CustomTokenRefreshView, SendMailAPIView,
-                              SendMailUserApiView)
+                        SendMailUserApiView)
 
 from . import views
 
@@ -31,10 +31,10 @@ useSingle3 = {
 urlpatterns = [
 
     # path('user/', UserMVS.as_view(userPlural)),
-    path('user-register/', views.UserRegistrationView.as_view()),
+    path('basic_user-register/', views.BasicUserRegistrationView.as_view()),
+    path('partner-register/', views.PartnerRegistrationView.as_view()),
     path('<uuid:uniqueId>/', UserMVS.as_view(useSingle)),
 
-    path('login/', UserLoginView.as_view()),
     path('check/', CustomTokenRefreshView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
 

@@ -13,8 +13,7 @@ class Service_category(models.Model):
         verbose_name_plural = 'Категории Услуг'
 
     parent = models.ForeignKey('self', on_delete=models.PROTECT, related_name='children', blank=True, null=True)
-    size = models.CharField(verbose_name="Размер", max_length=100, default=None, choices=Size, blank=True, null=True)
-    name = models.CharField(verbose_name="Название категории для", max_length=255)
+    name = models.CharField(verbose_name="Название категории", max_length=255)
     image = models.ImageField(upload_to=get_upload_path, null=True, blank=True)
     icon = models.FileField(upload_to=get_upload_path, validators=[validate_file_extension], null=True, blank=True)
     is_main = models.BooleanField(default=False)

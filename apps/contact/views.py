@@ -2,14 +2,14 @@
 from django.shortcuts import render
 from rest_framework import generics
 
-from .models import Contants
-from .serializers import ContantsSerializer
-
+from apps.contact.models import Contacts
+from apps.contact.serializers import ContactSerializer
 
 
 class ContantsCreateListView(generics.ListCreateAPIView):
-    serializer_class = ContantsSerializer
+    serializer_class = ContactSerializer
     queryset = Contacts.objects.all()
+
 
 class ContantsDeteleView(generics.DestroyAPIView):
     serializer_class = Contacts

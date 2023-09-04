@@ -2,10 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from django.contrib.auth.models import Group
-from django.utils.safestring import mark_safe
 
-from apps.users.models import User, Basket, Mycard , Bankcard, Subscr, Coment, Like, Favorites
-from .models import Like
+from apps.users.models import User, Basket, Mycard, Bankcard, Subscr, Coment, Favorites, Partners, Like, BasicUser
 
 
 class UserCreationForm(forms.ModelForm):
@@ -32,10 +30,10 @@ fieldsets = (
             'logo',
             'email',
             'name',
-            'surname',
-            'phone_one',
-            'dob',
-            'card',
+            'user_type',
+            'is_superuser',
+            'is_staff',
+            'is_active',
             'password',
             'resetPasswordUUID',
             'resetPasswordDate',
@@ -44,27 +42,57 @@ fieldsets = (
 
 
 class CustomUserAdmin(UserAdmin):
-    search_fields = ['email'];
+    search_fields = ['email', 'name']
     add_form = UserCreationForm
     form = UserCreationForm
-    list_display = ['name', 'surname', 'uniqueId', 'email']
-    list_display_links = ['email', 'uniqueId']
+    list_display = ['name', 'uniqueId', 'email', 'user_type']
+    list_display_links = ['name', 'email', 'uniqueId']
     ordering = ("-id",)
+    list_filter = ('is_superuser', 'is_staff', 'is_active', 'created_date', 'user_type', )
 
     fieldsets = fieldsets
 
     add_fieldsets = fieldsets
 
 
-admin.site.register(User, CustomUserAdmin);
-admin.site.unregister(Group);
-admin .site.register(Basket);
-admin.site.register(Mycard);
-admin.site.register(Bankcard);
-admin.site.register(Subscr);
-admin.site.register(Coment);
+class BasicUserAdmin(admin.ModelAdmin):
+    list_display = ['name', 'last_name', 'email', 'uniqueId', 'created_date']
+    search_fields = ['email', 'name', 'last_name']
+    list_display_links = ['name', 'last_name', 'email', 'uniqueId']
+
+    fieldsets = (
+        (None, {'fields': (
+            'uniqueId',
+            'logo',
+            'email',
+            'name',
+            'user_type',
+            'phone_number',
+            'dob',
+            'password',
+            'resetPasswordUUID',
+            'resetPasswordDate',
+        )}),
+    )
+
+
+class PartnersAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'activity_type', 'uniqueId', 'created_date')
+    list_display_links = list_display
+    search_fields = ('email', 'name', 'activity_type', 'address')
+
+
+admin.site.register(User, CustomUserAdmin)
+admin.site.unregister(Group)
+admin .site.register(Basket)
+admin.site.register(Mycard)
+admin.site.register(Bankcard)
+admin.site.register(Subscr)
+admin.site.register(Coment)
 # admin.site.register(Like);
-admin.site.register(Favorites);
+admin.site.register(Favorites)
+admin.site.register(Partners, PartnersAdmin)
+admin.site.register(BasicUser, BasicUserAdmin)
 
 
 @admin.register(Like)

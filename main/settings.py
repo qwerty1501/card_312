@@ -24,9 +24,9 @@ ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = "users.User"
 
-SECRET_ADMIN_KEY = '12345';
+SECRET_ADMIN_KEY = '12345'
 
-DEFAULT_PASSWORD = '123456';
+DEFAULT_PASSWORD = '123456'
 
 
 # Application definition
@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.contact.apps.ContactConfig',
     'apps.homes.apps.HomesConfig',
-    
+    'apps.service.apps.ServiceConfig',
+    'apps.event.apps.EventConfig',
+
     # REST
     'rest_framework',
     'django_filters',
@@ -191,3 +193,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+

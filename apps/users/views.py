@@ -2,44 +2,26 @@ import uuid
 import datetime
 
 from django.conf import settings
-from django.db.models import Sum
-from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.core.mail import BadHeaderError, send_mail
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth import authenticate, login
 
-from rest_framework import viewsets, permissions, status, generics
-from rest_framework.decorators import parser_classes
+from rest_framework import viewsets, permissions, status
 from rest_framework_simplejwt.views import TokenRefreshView
-from rest_framework.parsers import FormParser, FileUploadParser, MultiPartParser
-from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
-from .serializers import SendMailSerializer, SendMessageSerializer
-from apps.users.models import User
+from apps.users.models import User, BasicUser, Basket, Mycard, Bankcard, Subscr, Coment, Favorites, Likes
 from apps.users.serializers import (UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer,
-                                    SendMessageSerializer, UserRegisterSerializer)
+                                    SendMessageSerializer, BasicUserRegisterSerializer, PartnerRegisterSerializer,
+                                    SendMailSerializer)
 
 from apps.utils.main import generateError, generateAuthInfo
-from apps.users.models import Basket
-from apps.users.models import Mycard
-from apps.users.models import Bankcard
-from apps.users.models import Subscr
-from apps.users.models import Coment
-from apps.users.models import Like
-from apps.users.models import Favorites
 
-
-from django.views.generic.base import View
-from .models import Favorites, Likes
-from django.shortcuts import render, redirect
-from .models import Post, Likes
-
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic.base import View
 
 
@@ -56,7 +38,7 @@ class MVSDynamicPermission(permissions.BasePermission):
 
 class UserMVS(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    permission_classes = [MVSDynamicPermission]
+    # permission_classes = [MVSDynamicPermission]
     lookup_field = 'uniqueId'
     serializer_class = UserSerializer
 
@@ -69,7 +51,7 @@ class UserMVS(viewsets.ModelViewSet):
             return Response(data=f"{settings.CLIENT_URL}/user/{serializer.data['uniqueId']}")
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    def update(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         unique_id = kwargs['uniqueId']
         user = User.objects.get(uniqueId=unique_id)
         serializer = UserCRUDSerializer(user, data=request.data, context={'request': request})
@@ -78,22 +60,19 @@ class UserMVS(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class UserLoginView(generics.CreateAPIView):
-    queryset = User.objects.all();
-    serializer_class = UserSerializer
+class UserLoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
 
-    def create(self, request, *args, **kwargs):
-        uniqueId = request.data.get('uniqueId');
-        password = request.data.get('password');
-        try:
-            user = User.objects.get(uniqueId=uniqueId)
-        except User.DoesNotExist:
-            return Response(**generateError('DOES_NOT_EXIST'));
-        checkPassword = check_password(password, user.password);
-        if not checkPassword:
-            return Response(**generateError('WRONG_PASSWORD'));
-        serializer = self.serializer_class(user, context={'request': request});
-        return Response(data=generateAuthInfo(user, serializer.data));
+        user = authenticate(request, username=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        else:
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class ResetPasswordMVS(viewsets.ModelViewSet):
@@ -305,10 +284,44 @@ class DelLike(View):
             return redirect(f'/{pk}')
 
 
-class UserRegistrationView(APIView):
-    @swagger_auto_schema(request_body=UserSerializer)
+class BasicUserRegistrationView(APIView):
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type="object",
+        properties={
+            "name": openapi.Schema(type="string", example="Bilal"),
+            "user_type": openapi.Schema(type="integer", example=1),
+            "last_name": openapi.Schema(type="string", example="Kubatbekov"),
+            "email": openapi.Schema(type="string", example="azbk2004@gmail.com"),
+            "phone_number": openapi.Schema(type="string", example="996770519040"),
+            "password": openapi.Schema(type="string", example="admin"),
+        }
+    ))
     def post(self, request, format=None):
-        serializer = UserRegisterSerializer(data=request.data)
+        serializer = BasicUserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PartnerRegistrationView(APIView):
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type="object",
+        properties={
+            "name": openapi.Schema(type="string", example="BilalHolding"),
+            "email": openapi.Schema(type="string", example="partner@partner.com"),
+            "user_type": openapi.Schema(type="integer", example=2),
+            "address": openapi.Schema(type="string", example="Bishkek"),
+            "org": openapi.Schema(type="string", example="OcOO"),
+            "inn": openapi.Schema(type="string", example="123456789"),
+            "activity_type": openapi.Schema(type="string", example="Автосалон"),
+            "description": openapi.Schema(type="string", example="Overall we are the best"),
+            "phone_one": openapi.Schema(type="string", example="996519040"),
+            "password": openapi.Schema(type="string", example="admin"),
+        }
+    ))
+    def post(self, request, format=None):
+        serializer = PartnerRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

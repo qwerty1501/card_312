@@ -1,14 +1,10 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.state import token_backend
-from apps.users.models import User
-from apps.users.models import Basket
-from apps.users.models import Mycard
-from apps.users.models import Bankcard
-from apps.users.models import Subscr
-from apps.users.models import Coment
-from apps.users.models import Like
-from apps.users.models import Favorites
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from apps.users.models import User, Basket, Mycard, Bankcard, Subscr, Coment, Like, Favorites, Partners, BasicUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -27,9 +23,10 @@ class UserCRUDSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        user = User.objects.create(**validated_data);
+        user = User.objects.create(**validated_data)
+
         if validated_data['password']:
-            user.set_password(validated_data['password']);
+            user.set_password(validated_data['password'])
         user.save()
         return user
 
@@ -124,7 +121,15 @@ class FavoritesSerializer(serializers.Serializer):
         fields = "__all__"
 
 
-class UserRegisterSerializer(serializers.ModelSerializer):
+class BasicUserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = BasicUser
+        fields = '__all__'
+
+
+class PartnerRegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+
+    class Meta:
+        model = Partners
         fields = '__all__'
